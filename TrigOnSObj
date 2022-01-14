@@ -1,0 +1,20 @@
+trigger TriCon on Contact (after insert, after update) {
+ 	list<string> Var1= new list<string>();
+    for(contact c:trigger.new)
+    {
+        Var1.add(c.accountid);
+    }
+    list<account> Var2=[SELECT id, type FROM account WHERE id in:Var1];
+    list<account> acclist=new list<account>();
+    for(account a:Var2){
+        for(contact c:trigger.new)
+        {
+            if(c.accountid==a.id){
+                a.phone=c.phone;
+                acclist.add(a);
+            }
+        }
+    }
+    update acclist;
+   
+    }
